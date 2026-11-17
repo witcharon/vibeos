@@ -1,0 +1,12 @@
+{
+  "vibeos": "1.1.1",
+  "engine": {"name": "avenox-beyin", "series": "3"},
+  "vault": {
+    "layout": {"projects": "projects/", "meetings": "notes/gorusmeler/", "handoff": "notes/devir/", "knowledge": "knowledge/"},
+    "sync": {"mode": "git", "remote": "github.com/<kullanıcı>/<repo>"},
+    "learned": {"<proje>": {"commit": "<hash>", "date": "YYYY-MM-DD", "angles": 5}}
+  },
+  "machines": {
+    "<makine-adı>": {"os": "macos", "modules": ["core", "sync", "assistant", "bridge"], "updated": "YYYY-MM-DD"}
+  }
+}

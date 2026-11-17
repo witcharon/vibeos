@@ -446,79 +446,97 @@ vault'u tanısın ve "VibeOS'a not et" denince not kaynağıyla vault'a gitsin.
 ## 5. Yetenek: Projeyi öğren (`learn`)
 
 Kurulum gerektirmez; `core` kurulu her vault'ta çalışır. Kullanıcı "`<dizin>` projesini öğren"
-(veya "tazele") dediğinde uygulanır. Çıktı: vault'ta kaynak gösterilmiş bir proje kartı, proje
-kuralları ve açık sorular. Proje dizininde **hiçbir şey değişmez**.
+veya "`<proje>`'yi tazele" dediğinde uygulanır. Çıktı: vault'ta kaynak gösterilmiş bir proje
+kartı, proje kuralları ve kullanıcıya açık sorular. Proje dizininde **hiçbir şey değişmez**.
+
+Hazır metinler: açı görevleri `templates/learn-lens.md`, kart iskeleti
+`templates/project-card.md` (https://github.com/witcharon/vibeos/tree/main/templates).
 
 ### 5.1 Ön keşif (ana ajan, birkaç dakika)
-1. **Doğru kodu öğren.** Yerel kopyanın dalını ve uzakla farkını kontrol et
-   (`git branch --show-current`, `git ls-remote origin -h refs/heads/<ana-dal>` ile yerel
-   `HEAD`'i karşılaştır). Yerel kopya yan dalda, eski ya da kirliyse kullanıcının klasörüne
-   dokunma (checkout, pull, stash yok): ana dalı geçici klasöre ayrıca klonla ve oradan öğren.
-   Kartta hangi commit'in öğrenildiğini yaz.
-2. Aynı projeye ait birden çok repo/klasör var mı (uygulama, landing, worker, mobil)? Ortak
-   remote'u olan kopyaları ayıkla, kapsamı kullanıcıya tek cümleyle bildir.
-3. Ölçü: izlenen dosya sayısı, kod satırı, commit sayısı, ana diller, paket dosyaları, README.
-4. Vault'ta projeyi geçen notları ara (`beyin.py context "<proje>"`, metin araması).
-5. Açı sayısını seç:
+1. **Doğru kodu öğren.** Git deposuysa dalı ve uzakla farkı kontrol et
+   (`git branch --show-current`; yerel `HEAD`'i `git ls-remote origin -h refs/heads/<ana-dal>` ile
+   karşılaştır). Yerel kopya yan dalda, geride ya da kirliyse kullanıcının klasörüne dokunma
+   (checkout, pull, stash yok): ana dalı geçici klasöre ayrıca klonla, açıları oraya yönlendir.
+   Git deposu değilse klasörü olduğu gibi oku; tarihçe açısını atla, kartta "git yok" yaz.
+2. **Kapsam.** Aynı projeye ait başka klasör/repo var mı (uygulama, landing, worker, mobil)?
+   Aynı remote'u paylaşan kopyalardan en tazesini bir kez öğren. Kapsamı tek cümleyle söyle.
+3. **Ölçü.** İzlenen dosya, kod satırı, commit sayısı, üst klasör dağılımı, paket dosyaları,
+   README. Açı sayısını seç:
 
-| Ölçü | Örnek | Açı sayısı |
+| Ölçü | Örnek | Açı |
 |---|---|---|
-| Küçük | < 200 dosya, < 10k satır | 3-4 (ürün, mimari, operasyon+entegrasyon, tarihçe+risk) |
-| Orta | < 1.000 dosya | 5 (veri ve entegrasyon ayrılır) |
+| Küçük | < 200 dosya, < 10k satır | 3-4 (ürün · mimari+veri · operasyon+entegrasyon · tarihçe+risk) |
+| Orta | < 1.000 dosya | 5 (ürün · mimari · veri+entegrasyon · operasyon · tarihçe+risk) |
 | Büyük | ≥ 1.000 dosya veya birden çok servis | 7 |
 
+4. **İş açısı (ana ajan, açılar çalışırken).** Vault'ta projeyi ara (`beyin.py context
+   "<proje>"`, metin araması, görüşme/gelir/müşteri notları, `Threads.md`). Bu bilgi sentezde
+   alt ajan iddialarını sınamak için de kullanılır.
+
 ### 5.2 Açılar
-Her açı ayrı bir alt ajandır (istemci destekliyorsa paralel; desteklemiyorsa sırayla aynı ajan).
-Her açıya **kapsam dışı** listesi ver ki aynı dosyalar üç kez incelenmesin.
+Her açı ayrı bir alt ajandır, hepsi tek seferde paralel gönderilir. İstemcinin alt ajanı yoksa
+açıları aynı ajan sırayla çalıştırır; her açıdan sonra kısa ara not yazıp bağlamı boşaltır.
 
 | # | Açı | Ne çıkarır | Kapsam dışı |
 |---|---|---|---|
-| 1 | Ürün | Ne işe yarar, kimin için, özellik haritası, fiyat/plan, landing ve içerik | Kod yapısı, deploy |
-| 2 | Mimari | Dizin haritası, servisler, istek akışı, giriş noktaları, bileşenler, ölü/çift kod | Veri şeması ayrıntısı, deploy |
-| 3 | Veri | Şema, tablolar ve ilişkiler, migration geçmişi, önemli sorgular | API dışı entegrasyonlar |
-| 4 | Entegrasyonlar | Dış servisler ve ne için, webhook'lar, ortam değişkeni **adları** ve kullanıldığı yer | Deploy ayarı |
-| 5 | Operasyon | Çalıştırma/build/test komutları, deploy, CI, worker'lar, cron, izleme | Kod kalitesi |
-| 6 | Tarihçe ve durum | Dönemler, son işler, açık dallar, yarım işler, TODO'lar | Güvenlik denetimi |
-| 7 | Riskler | Güvenlik, sır sızıntısı (yalnız var/yok ve commit), test açığı, bağımlılık eskiliği, kırılgan yerler | Ürün yorumu |
+| 1 | Ürün | Ne işe yarar, kimin için, özellik haritası, fiyat/plan, landing, içerik, SEO | Kod yapısı, deploy |
+| 2 | Mimari | Dizin haritası, servisler ve nasıl konuştukları, istek akışı, auth, kuyruklar, ölü/çift kod, geçerli config | Şema ayrıntısı, deploy |
+| 3 | Veri | DB/ORM, ana tablolar, ilişkiler, migration yolu, tenant izolasyonu, saklama/silme | Dış API'ler |
+| 4 | Entegrasyonlar | Dış servisler ve ne için, webhook'lar, env **adları** ve kullanıldığı yer, belge-kod farkı | Deploy/CI |
+| 5 | Operasyon | Çalıştırma/build/test komutları, deploy, CI, worker, cron, izleme, yedek | Kod kalitesi |
+| 6 | Tarihçe ve durum | Dönemler, dalların ana dala göre durumu, son işler, yarım işler, plan belgeleri | Güvenlik denetimi |
+| 7 | Riskler | Geçmişte sır (yalnız var/yok + commit), yetki, rate limit, webhook imzası, bağımlılık yaşı, testsiz kritik yollar, mevcut denetim raporları | Ürün yorumu |
 
-Küçük/orta projede açıları tabloya göre birleştir. **İş açısını** (vault'taki görüşmeler, gelir
-ve müşteri notlarıyla eşleştirme) ana ajan kendisi yapar.
-
-Her alt ajana verilecek ortak kurallar:
-- Yalnız oku. Dosya değiştirme, `git checkout/pull/reset/stash`, paket kurma, build, deploy yok.
-- `.env*`, anahtar ve token **değerlerini** okuma, yazdırma. Ad çıkarmak için değer yazdırmayan
-  komut kullan (ör. `grep -o '^[A-Z_][A-Z0-9_]*' .env.example`).
-- Her bulguya kaynak ver: `dosya:satır` veya commit hash. Emin olmadığını "doğrulanmadı" diye yaz.
-- Platform farkını bil: macOS'ta `timeout` yok; ağ gerektiren komut başarısızsa atla ve söyle.
-- Çıktı: açı başına en çok ~700 kelime, maddeler halinde, sonda "riskler" ve "açık sorular".
+Kapsam dışı listesi şart: verilmezse her açı aynı config ve API dosyalarını baştan okur.
+Her açının görev metnine şunları koy (tam metin `templates/learn-lens.md`):
+- Klonun mutlak yolu, öğrenilen commit, ölçü sayıları, vault'tan bilinen gerçekler (tekrar etmek
+  için değil, doğrulamak için).
+- Yalnız oku: dosya değiştirme, `git checkout/pull/reset/stash/fetch`, paket kurma, build, test,
+  deploy, veritabanı bağlantısı yok.
+- `.env*`, anahtar, token **değerlerini** okuma/yazdırma; adları değer yazdırmayan komutla çıkar.
+- Her bulguya kaynak: `dosya:satır` veya commit hash. Emin değilse "doğrulanmadı".
+- Platform sınırını bil (macOS'ta `timeout` yok; ağ gerektiren komutu atla ve söyle).
+- Hafıza/receipt yazma. Çıktı: maddeler, en çok ~700 kelime, sonda "Riskler" ve "Açık sorular".
 
 ### 5.3 Sentez ve çapraz doğrulama (ana ajan)
-1. Açıların çıktılarını birleştir. **İki açı çelişiyorsa veya bir iddia kartın kritik bölümüne
-   giriyorsa (risk, sır, geçerli config, deploy yolu), tek komutla kendin doğrula.** Alt ajanlar
-   kendinden emin yanlış iddia üretebilir; doğrulanmamış iddia "doğrulanmadı" olarak kalır.
-   **"X yok" iddiaları da doğrulanır**, özellikle "geçmişte sır yok": vault'taki bilinen
-   olaylarla (ör. "şu secret'ı yenile" notu) karşılaştır ve hedefli, değer yazdırmayan bir arama
-   yap (`git log --all -G '<DEGISKEN>\s*=\s*\S{8,}' --format=%h`).
-   Kartta adı geçen sunucu/port gibi altyapı bilgisini, kullanıcının kendi sistemi olduğu için,
-   zararsız bir erişilebilirlik kontrolüyle (`nc -z`) teyit edebilirsin; tarama yapma.
-2. Vault'taki mevcut notlarla çelişen bilgiyi ayrı listele ve kullanıcıya sor; sessizce ezme.
-3. Proje kartını yaz: `projects/<proje>/README.md` (veya 0.3'teki eşlenen yol). Bölümler:
-   künye (dizin, repo, öğrenilen commit, canlı adres, stack, komutlar), ne, mimari, veri,
-   entegrasyonlar (yalnız env adları), operasyon, tarihçe, riskler (öncelik sırasıyla, her
-   birine tek cümle öneri), tutarsızlıklar, açık sorular.
-4. Projeye özgü kalıcı kuralları `projects/<proje>/Kurallar.md`'ye yaz (ör. "geçerli config
-   yalnız X"). Açık riskleri `Threads.md`'ye tek kayıt olarak ekle.
-5. `beyin.py project-scope add --folder <kart-klasörü> --project <proje>`; `bridge` kuruluysa
-   proje kökünü köprüye ekle.
-6. Doğrula: `beyin.py sync`, sonra `beyin.py context "<proje> hakkında bir soru"` kartı
-   kaynak olarak döndürmeli.
-7. `.vibeos/kurulum.json` → `vault.learned.<proje>`: `{"commit": "<hash>", "date": "YYYY-MM-DD",
-   "angles": N}`.
+1. **İki açı çelişiyorsa veya iddia kritik bölüme giriyorsa (sır, geçerli config, deploy yolu,
+   yetki), tek salt-okuma komutuyla kendin doğrula.** Alt ajanlar kendinden emin yanlış iddia
+   üretebilir. Doğrulanmayan iddia "doğrulanmadı" olarak kalır.
+2. **"X yok" iddiaları da doğrulanır**, özellikle "geçmişte sır yok". Vault'taki bilinen
+   olaylarla karşılaştır ve hedefli, değer yazdırmayan arama yap
+   (`git log --all -G '<DEGISKEN>\s*[=:]\s*\S{12,}' --format='%h %ad %s'`). Eşleşmeyi göstermeden
+   önce maskele; yer tutucu (`***`, `<...>`) olup olmadığına bak.
+3. Kartta geçen altyapıyı (ör. veritabanı host:port) kullanıcının kendi sistemi olduğu için tek,
+   zararsız bir erişilebilirlik kontrolüyle teyit edebilirsin (`nc -z host port`). Tarama yapma.
+4. Vault'taki daha yeni bilgi repo belgesinden önce gelir; repo belgesini "eski" diye işaretle.
+5. Vault'taki notlarla çelişen bilgiyi sessizce ezme; açık sorulara koy.
 
-### 5.4 Tazele
-"`<proje>`'yi tazele" denince `vault.learned.<proje>.commit`'ten bu yana `git log`/`git diff
---stat` ile neyin değiştiğine bak; yalnız etkilenen açıları yeniden çalıştır, kartın ilgili
-bölümlerini güncelle ve kartın başına tarihli "değişenler" satırı ekle.
+### 5.4 Yaz ve doğrula
+1. Kart: `projects/<proje>/README.md` (veya 0.3'teki eşlenen yol), iskelet
+   `templates/project-card.md`. Kartın ilk satırı öğrenilen commit'i taşır; tazeleme buradan okur.
+2. Projeye özgü kalıcı kurallar `projects/<proje>/Kurallar.md` (ör. "geçerli config yalnız X").
+3. Öncelikli riskler ve açık sorular `Threads.md`'ye **tek** kayıt olarak.
+4. `beyin.py project-scope add --folder <kart-klasörü> --project <proje>`; `bridge` kuruluysa
+   proje kökünü köprüye ekle.
+5. `beyin.py sync`, sonra `beyin.py context "<proje> hakkında somut bir soru>"`: kart kaynak
+   olarak dönmeli. Dönmüyorsa öğrenme bitmemiştir.
+6. `.vibeos/kurulum.json` → `vault.learned.<proje>`: `{"commit": "<hash>", "date": "YYYY-MM-DD",
+   "angles": N}` (kartın ilk satırının aynası).
+7. Geçici klonu sil.
+8. Kullanıcıya rapor sırası: nasıl çalıştı (açı sayısı, süre), doğrulamanın neyi yakaladığı,
+   öncelikli riskler (tek cümle öneriyle), tutarsızlıklar, onun kararını bekleyen sorular.
+
+### 5.5 Tazele
+"`<proje>`'yi tazele" denince:
+1. Kartın ilk satırındaki commit'ten bu yana ne değiştiğine bak:
+   `git log --oneline <commit>..origin/<ana-dal>` ve `git diff --stat <commit>..origin/<ana-dal>`
+   (yerel kopya geride ise 5.1'deki gibi taze klon).
+2. Değişen yolları açılara eşle (ör. şema/migration → veri; route/servis → mimari; package,
+   deploy, CI dosyaları → operasyon; fiyat/landing/içerik → ürün; her durumda → tarihçe).
+3. Değişiklik küçükse (birkaç commit, < ~20 dosya) diff'i ana ajan kendisi okur; büyükse yalnız
+   etkilenen açılar alt ajanla yeniden çalışır.
+4. Kartta yalnız ilgili bölümleri güncelle, ilk satırdaki commit'i yenile ve hemen altına tarihli
+   "Değişenler" satırı ekle. Çözülen tutarsızlık ve soruları kapat. 5.4'teki geri okumayı tekrarla.
 
 ---
 
@@ -527,7 +545,7 @@ bölümlerini güncelle ve kartın başına tarihli "değişenler" satırı ekle
 Her çalıştırmanın sonunda güncelle (Git'te izlenir):
 ```json
 {
-  "vibeos": "1.1.0",
+  "vibeos": "1.1.1",
   "engine": {"name": "avenox-beyin", "series": "3"},
   "vault": {
     "layout": {"projects": "projects/", "meetings": "notes/gorusmeler/", "handoff": "notes/devir/", "knowledge": "knowledge/"},

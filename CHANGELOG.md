@@ -1,5 +1,13 @@
 # Değişiklikler
 
+## 1.1.1 (2026-11-18)
+- `learn` tamamlandı: hazır açı görev metinleri (`templates/learn-lens.md`) ve kart iskeleti
+  (`templates/project-card.md`); git'siz projeler; alt ajanı olmayan istemcide sıralı çalışma;
+  sentezde olumsuz iddiaların doğrulanması, maskeleme, vault > eski repo belgesi; kartın ilk satırı
+  öğrenilen commit'in kaynağı; geçici klonun silinmesi; rapor sırası.
+- "Tazele" gerçek bir projede denendi: değişen yollar açılara eşlenir, küçük diff'i ana ajan
+  kendisi okur, kartın ilk satırı ve "Değişenler" satırı güncellenir.
+
 ## 1.1.0 (2026-11-18)
 - Yeni yetenek `learn` ("projeyi öğren"): ön keşif, boyuta göre 3-7 paralel salt-okuma açısı,
   sentez ve çapraz doğrulama (olumsuz iddialar dahil), vault'a proje kartı + kurallar,

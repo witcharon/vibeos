@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/VibeOS-v1.1.0-e8892b?style=for-the-badge&labelColor=0e0d0b" alt="VibeOS v1.0.0">
+  <img src="https://img.shields.io/badge/VibeOS-v1.1.1-e8892b?style=for-the-badge&labelColor=0e0d0b" alt="VibeOS v1.0.0">
   <img src="https://img.shields.io/badge/motor-Avenox%20Beyin%20V3-5f7a5a?style=for-the-badge&labelColor=0e0d0b" alt="Motor: Avenox Beyin V3">
   <img src="https://img.shields.io/badge/lisans-MIT-c2412d?style=for-the-badge&labelColor=0e0d0b" alt="Lisans MIT">
 </p>
