@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/hero.webp" alt="VibeOS: a second brain for your agents" width="100%">
+  <img src="assets/hero-v2.webp" alt="VibeOS: a second brain for your agents" width="100%">
 </p>
 
 <p align="center">
@@ -8,7 +8,7 @@
   <img src="https://img.shields.io/badge/lisans-MIT-c2412d?style=for-the-badge&labelColor=0e0d0b" alt="Lisans MIT">
 </p>
 
-<p align="center"><img src="assets/logo.webp" alt="VibeOS v1" width="420"></p>
+<p align="center"><img src="assets/logo-v2.webp" alt="VibeOS v1" width="420"></p>
 
 <p align="center"><b>Yapay zekâ ajanların için kalıcı hafıza. Tek ateş, tüm sistem.</b><br>
 <sub>Claude Code · Codex · Hermes · OpenCode · Antigravity · Kiro</sub></p>
@@ -33,7 +33,7 @@ paylaşılabilir hali. İçindeki her kural sahada bir şey kırıldıktan sonra
 
 ## ▸ Tek ateşle kurulum
 
-<p align="center"><img src="assets/ritual.webp" alt="Kılıcı küle saplayan gezgin, ateş yanıyor" width="100%"></p>
+<p align="center"><img src="assets/ritual-v2.webp" alt="Kılıcı küle saplayan gezgin, ateş yanıyor" width="100%"></p>
 
 Not klasörünü (ya da boş bir klasörü) ajanında aç ve şunu yaz:
 
@@ -66,13 +66,13 @@ ekleyip yukarı geçersin. Ajan nelerin kurulu olduğunu kendisi tespit eder, ya
 <table>
 <tr>
 <td width="50%" valign="top">
-<img src="assets/mod-core.webp" alt="Çekirdek" width="100%">
+<img src="assets/mod-core-v2.webp" alt="Çekirdek" width="100%">
 <h3>⬢ Çekirdek <sup><code>core</code></sup></h3>
 Oturumlar arası hafıza. Kimlik (<code>Core.md</code>), kurallar, oturum kartları, açık konular,
 kaynak bağlantılı not ve geri okuma. <b>Zorunlu.</b>
 </td>
 <td width="50%" valign="top">
-<img src="assets/mod-sync.webp" alt="Senkron" width="100%">
+<img src="assets/mod-sync-v2.webp" alt="Senkron" width="100%">
 <h3>⇄ Senkron <sup><code>sync</code></sup></h3>
 Vault'u private bir GitHub reposuyla birden çok makinede eşitler. 5 dakikada bir, çakışmaya
 dayanıklı, makine dosyaları Git dışında.
@@ -80,13 +80,13 @@ dayanıklı, makine dosyaları Git dışında.
 </tr>
 <tr>
 <td width="50%" valign="top">
-<img src="assets/mod-assistant.webp" alt="Asistan" width="100%">
+<img src="assets/mod-assistant-v2.webp" alt="Asistan" width="100%">
 <h3>✦ Asistan <sup><code>assistant</code></sup></h3>
 <a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a> eklentisi. İstersen
 Telegram'dan ulaşılan, istersen sunucuda 7/24 çalışan kişisel asistan. Senkron ister.
 </td>
 <td width="50%" valign="top">
-<img src="assets/mod-bridge.webp" alt="Köprü" width="100%">
+<img src="assets/mod-bridge-v2.webp" alt="Köprü" width="100%">
 <h3>⌖ Köprü <sup><code>bridge</code></sup></h3>
 Başka proje klasörlerindeki ajan oturumları vault'u tanır. "VibeOS'a not et" dediğinde not,
 kaynağıyla vault'a gider; oturum başında o projenin son durumu gelir.
@@ -138,7 +138,7 @@ knowledge/             ← kalıcı öğrenimler ve kararlar
 
 ## ▸ Bestiyer: sahada yenilen tuzaklar
 
-<p align="center"><img src="assets/lessons.webp" alt="Bestiyer" width="100%"></p>
+<p align="center"><img src="assets/lessons-v2.webp" alt="Bestiyer" width="100%"></p>
 
 VibeOS'un kuralları kâğıt üstünde tasarlanmadı. Her biri gerçek bir kurulumda bir şey kırıldıktan
 sonra tarife işlendi. Bazıları:
@@ -217,6 +217,6 @@ The recipe the agent follows is [`vibeos.md`](vibeos.md) (Turkish; agents reply 
 ---
 
 <p align="center">
-  <img src="assets/icon.webp" alt="" width="72"><br>
+  <img src="assets/icon-v2.webp" alt="" width="72"><br>
   <sub>MIT © <a href="https://cansincengiz.me">Cansın Cengiz</a> · Hafıza motoru <a href="https://github.com/avenoxai/avenoxbeyin">Avenox Beyin</a> (MIT) · <a href="https://cansincengiz.me/tr/docs/vibeos">Dokümantasyon</a></sub>
 </p>
