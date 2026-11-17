@@ -1,14 +1,16 @@
 <p align="center">
-  <img src="assets/hero.webp" alt="VibeOS v1" width="100%">
+  <img src="assets/hero.webp" alt="VibeOS: a second brain for your agents" width="100%">
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/VibeOS-v1.0.0-8b5cf6?style=for-the-badge&labelColor=0b0a1f" alt="VibeOS v1.0.0">
-  <img src="https://img.shields.io/badge/motor-Avenox%20Beyin%20V3-22d3ee?style=for-the-badge&labelColor=0b0a1f" alt="Motor: Avenox Beyin V3">
-  <img src="https://img.shields.io/badge/lisans-MIT-f97316?style=for-the-badge&labelColor=0b0a1f" alt="Lisans MIT">
+  <img src="https://img.shields.io/badge/VibeOS-v1.0.0-e8892b?style=for-the-badge&labelColor=0e0d0b" alt="VibeOS v1.0.0">
+  <img src="https://img.shields.io/badge/motor-Avenox%20Beyin%20V3-5f7a5a?style=for-the-badge&labelColor=0e0d0b" alt="Motor: Avenox Beyin V3">
+  <img src="https://img.shields.io/badge/lisans-MIT-c2412d?style=for-the-badge&labelColor=0e0d0b" alt="Lisans MIT">
 </p>
 
-<p align="center"><b>Yapay zekâ ajanların için kalıcı hafıza. Tek büyü, tüm sistem.</b><br>
+<p align="center"><img src="assets/logo.webp" alt="VibeOS v1" width="420"></p>
+
+<p align="center"><b>Yapay zekâ ajanların için kalıcı hafıza. Tek ateş, tüm sistem.</b><br>
 <sub>Claude Code · Codex · Hermes · OpenCode · Antigravity · Kiro</sub></p>
 
 ---
@@ -29,9 +31,9 @@ paylaşılabilir hali. İçindeki her kural sahada bir şey kırıldıktan sonra
 
 ---
 
-## ▸ Tek büyüyle kurulum
+## ▸ Tek ateşle kurulum
 
-<p align="center"><img src="assets/ritual.webp" alt="Kurulum ritüeli" width="100%"></p>
+<p align="center"><img src="assets/ritual.webp" alt="Kılıcı küle saplayan gezgin, ateş yanıyor" width="100%"></p>
 
 Not klasörünü (ya da boş bir klasörü) ajanında aç ve şunu yaz:
 
@@ -58,7 +60,7 @@ Ajanın okuduğu tarifin tamamı: [`vibeos.md`](vibeos.md)
 
 ## ▸ Modüller
 
-Tek kurulum var. İstediğin modülü seç; sonradan **aynı büyüyü tekrar söyleyerek** eksik modülleri
+Tek kurulum var. İstediğin modülü seç; sonradan **aynı istemi tekrar vererek** eksik modülleri
 ekleyip yukarı geçersin. Ajan nelerin kurulu olduğunu kendisi tespit eder, yalnız eksikleri tamamlar.
 
 <table>
