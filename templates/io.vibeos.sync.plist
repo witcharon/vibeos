@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- VibeOS senkron (macOS). VAULT ve PATH değerlerini bu makineye göre değiştir.
+     Kur:     cp io.vibeos.sync.plist ~/Library/LaunchAgents/ && launchctl load -w ~/Library/LaunchAgents/io.vibeos.sync.plist
+     Kontrol: launchctl list | grep vibeos ; tail ~/Library/Logs/vibeos-sync.log -->
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>io.vibeos.sync</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/sh</string>
+    <string>/Users/KULLANICI/VAULT/.vibeos/sync.sh</string>
+    <string>/Users/KULLANICI/VAULT</string>
+  </array>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key><string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+    <key>LANG</key><string>en_US.UTF-8</string>
+  </dict>
+  <key>StartInterval</key><integer>300</integer>
+  <key>RunAtLoad</key><true/>
+  <key>StandardOutPath</key><string>/Users/KULLANICI/Library/Logs/vibeos-sync.log</string>
+  <key>StandardErrorPath</key><string>/Users/KULLANICI/Library/Logs/vibeos-sync.log</string>
+</dict>
+</plist>

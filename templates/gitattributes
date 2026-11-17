@@ -1,0 +1,4 @@
+receipts/** -text
+**/Last-Session.md merge=union
+**/Journal.md merge=union
+**/Arşiv/*.md merge=union
