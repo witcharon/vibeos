@@ -35,6 +35,7 @@ tabanlı bir ikinci beyin kurulumudur. Üç katmandan oluşur:
 | Senkron | `sync` | Vault'u private GitHub reposuyla birden çok makinede eşitler | Hayır |
 | Asistan | `assistant` | Hermes Agent eklentisi; isteğe bağlı Telegram ve 7/24 VPS | Hayır |
 | Köprü | `bridge` | Başka proje klasörlerinden vault'a not akışı ve proje bağlamı | Hayır |
+| Öğren | `learn` | Bir proje dizinini paralel açılardan inceleyip vault'a proje kartı yazar | Hayır (çekirdekle gelir, kurulum gerektirmez) |
 
 ---
 
@@ -442,16 +443,96 @@ vault'u tanısın ve "VibeOS'a not et" denince not kaynağıyla vault'a gitsin.
 
 ---
 
-## 5. Kayıt: `.vibeos/kurulum.json`
+## 5. Yetenek: Projeyi öğren (`learn`)
+
+Kurulum gerektirmez; `core` kurulu her vault'ta çalışır. Kullanıcı "`<dizin>` projesini öğren"
+(veya "tazele") dediğinde uygulanır. Çıktı: vault'ta kaynak gösterilmiş bir proje kartı, proje
+kuralları ve açık sorular. Proje dizininde **hiçbir şey değişmez**.
+
+### 5.1 Ön keşif (ana ajan, birkaç dakika)
+1. **Doğru kodu öğren.** Yerel kopyanın dalını ve uzakla farkını kontrol et
+   (`git branch --show-current`, `git ls-remote origin -h refs/heads/<ana-dal>` ile yerel
+   `HEAD`'i karşılaştır). Yerel kopya yan dalda, eski ya da kirliyse kullanıcının klasörüne
+   dokunma (checkout, pull, stash yok): ana dalı geçici klasöre ayrıca klonla ve oradan öğren.
+   Kartta hangi commit'in öğrenildiğini yaz.
+2. Aynı projeye ait birden çok repo/klasör var mı (uygulama, landing, worker, mobil)? Ortak
+   remote'u olan kopyaları ayıkla, kapsamı kullanıcıya tek cümleyle bildir.
+3. Ölçü: izlenen dosya sayısı, kod satırı, commit sayısı, ana diller, paket dosyaları, README.
+4. Vault'ta projeyi geçen notları ara (`beyin.py context "<proje>"`, metin araması).
+5. Açı sayısını seç:
+
+| Ölçü | Örnek | Açı sayısı |
+|---|---|---|
+| Küçük | < 200 dosya, < 10k satır | 3-4 (ürün, mimari, operasyon+entegrasyon, tarihçe+risk) |
+| Orta | < 1.000 dosya | 5 (veri ve entegrasyon ayrılır) |
+| Büyük | ≥ 1.000 dosya veya birden çok servis | 7 |
+
+### 5.2 Açılar
+Her açı ayrı bir alt ajandır (istemci destekliyorsa paralel; desteklemiyorsa sırayla aynı ajan).
+Her açıya **kapsam dışı** listesi ver ki aynı dosyalar üç kez incelenmesin.
+
+| # | Açı | Ne çıkarır | Kapsam dışı |
+|---|---|---|---|
+| 1 | Ürün | Ne işe yarar, kimin için, özellik haritası, fiyat/plan, landing ve içerik | Kod yapısı, deploy |
+| 2 | Mimari | Dizin haritası, servisler, istek akışı, giriş noktaları, bileşenler, ölü/çift kod | Veri şeması ayrıntısı, deploy |
+| 3 | Veri | Şema, tablolar ve ilişkiler, migration geçmişi, önemli sorgular | API dışı entegrasyonlar |
+| 4 | Entegrasyonlar | Dış servisler ve ne için, webhook'lar, ortam değişkeni **adları** ve kullanıldığı yer | Deploy ayarı |
+| 5 | Operasyon | Çalıştırma/build/test komutları, deploy, CI, worker'lar, cron, izleme | Kod kalitesi |
+| 6 | Tarihçe ve durum | Dönemler, son işler, açık dallar, yarım işler, TODO'lar | Güvenlik denetimi |
+| 7 | Riskler | Güvenlik, sır sızıntısı (yalnız var/yok ve commit), test açığı, bağımlılık eskiliği, kırılgan yerler | Ürün yorumu |
+
+Küçük/orta projede açıları tabloya göre birleştir. **İş açısını** (vault'taki görüşmeler, gelir
+ve müşteri notlarıyla eşleştirme) ana ajan kendisi yapar.
+
+Her alt ajana verilecek ortak kurallar:
+- Yalnız oku. Dosya değiştirme, `git checkout/pull/reset/stash`, paket kurma, build, deploy yok.
+- `.env*`, anahtar ve token **değerlerini** okuma, yazdırma. Ad çıkarmak için değer yazdırmayan
+  komut kullan (ör. `grep -o '^[A-Z_][A-Z0-9_]*' .env.example`).
+- Her bulguya kaynak ver: `dosya:satır` veya commit hash. Emin olmadığını "doğrulanmadı" diye yaz.
+- Platform farkını bil: macOS'ta `timeout` yok; ağ gerektiren komut başarısızsa atla ve söyle.
+- Çıktı: açı başına en çok ~700 kelime, maddeler halinde, sonda "riskler" ve "açık sorular".
+
+### 5.3 Sentez ve çapraz doğrulama (ana ajan)
+1. Açıların çıktılarını birleştir. **İki açı çelişiyorsa veya bir iddia kartın kritik bölümüne
+   giriyorsa (risk, sır, geçerli config, deploy yolu), tek komutla kendin doğrula.** Alt ajanlar
+   kendinden emin yanlış iddia üretebilir; doğrulanmamış iddia "doğrulanmadı" olarak kalır.
+   **"X yok" iddiaları da doğrulanır**, özellikle "geçmişte sır yok": vault'taki bilinen
+   olaylarla (ör. "şu secret'ı yenile" notu) karşılaştır ve hedefli, değer yazdırmayan bir arama
+   yap (`git log --all -G '<DEGISKEN>\s*=\s*\S{8,}' --format=%h`).
+   Kartta adı geçen sunucu/port gibi altyapı bilgisini, kullanıcının kendi sistemi olduğu için,
+   zararsız bir erişilebilirlik kontrolüyle (`nc -z`) teyit edebilirsin; tarama yapma.
+2. Vault'taki mevcut notlarla çelişen bilgiyi ayrı listele ve kullanıcıya sor; sessizce ezme.
+3. Proje kartını yaz: `projects/<proje>/README.md` (veya 0.3'teki eşlenen yol). Bölümler:
+   künye (dizin, repo, öğrenilen commit, canlı adres, stack, komutlar), ne, mimari, veri,
+   entegrasyonlar (yalnız env adları), operasyon, tarihçe, riskler (öncelik sırasıyla, her
+   birine tek cümle öneri), tutarsızlıklar, açık sorular.
+4. Projeye özgü kalıcı kuralları `projects/<proje>/Kurallar.md`'ye yaz (ör. "geçerli config
+   yalnız X"). Açık riskleri `Threads.md`'ye tek kayıt olarak ekle.
+5. `beyin.py project-scope add --folder <kart-klasörü> --project <proje>`; `bridge` kuruluysa
+   proje kökünü köprüye ekle.
+6. Doğrula: `beyin.py sync`, sonra `beyin.py context "<proje> hakkında bir soru"` kartı
+   kaynak olarak döndürmeli.
+7. `.vibeos/kurulum.json` → `vault.learned.<proje>`: `{"commit": "<hash>", "date": "YYYY-MM-DD",
+   "angles": N}`.
+
+### 5.4 Tazele
+"`<proje>`'yi tazele" denince `vault.learned.<proje>.commit`'ten bu yana `git log`/`git diff
+--stat` ile neyin değiştiğine bak; yalnız etkilenen açıları yeniden çalıştır, kartın ilgili
+bölümlerini güncelle ve kartın başına tarihli "değişenler" satırı ekle.
+
+---
+
+## 6. Kayıt: `.vibeos/kurulum.json`
 
 Her çalıştırmanın sonunda güncelle (Git'te izlenir):
 ```json
 {
-  "vibeos": "1.0.0",
+  "vibeos": "1.1.0",
   "engine": {"name": "avenox-beyin", "series": "3"},
   "vault": {
     "layout": {"projects": "projects/", "meetings": "notes/gorusmeler/", "handoff": "notes/devir/", "knowledge": "knowledge/"},
-    "sync": {"mode": "git", "remote": "github.com/<kullanıcı>/<repo>"}
+    "sync": {"mode": "git", "remote": "github.com/<kullanıcı>/<repo>"},
+    "learned": {"<proje>": {"commit": "<hash>", "date": "YYYY-MM-DD", "angles": 5}}
   },
   "machines": {
     "<makine-adı>": {"os": "macos", "modules": ["core", "sync", "assistant", "bridge"], "updated": "YYYY-MM-DD"}
@@ -461,7 +542,7 @@ Her çalıştırmanın sonunda güncelle (Git'te izlenir):
 Makine adı için `uname -n` (Windows'ta `hostname`) kısa hali yeterli. Sır, kişisel yol dışında
 bilgi veya token yazma. `sync` yoksa `vault.sync` alanını `null` bırak.
 
-## 6. Kapanış özeti
+## 7. Kapanış özeti
 Kullanıcıya kısa yaz: hangi sistem bulundu ve nasıl uyarlandı, hangi modüller kuruldu/güncellendi,
 `AGENTS.md`'ye ne eklendi, hangi adımlar ona kaldı (güven onayı, token, yeni oturum testi),
 sonradan modül eklemek için aynı isteği tekrar vermesinin yeterli olduğu. Motorun oturum kartı ve
@@ -487,6 +568,9 @@ receipt protokolünü uygula.
 | Şişen oturum kartları | Last-Session sınırı aştı, bağlam kırpıldı. | `companion-compact` ile arşivle; dosyayı sıfırdan yazma. |
 | Receipt çakışması | İki makine aynı `event_id` ile receipt yazınca add/add çakışması. | `event_id` sonuna oturum kimliğinin ilk 8 karakterini ekle. |
 | Saat dilimi | Sunucu UTC'de, hatırlatma 3 saat kaydı. | Zamanlanmış işlerde saat dilimini açık yaz. |
+| Kendinden emin alt ajan | Proje öğrenirken bir açı "Umami kodda yok" dedi; vardı. | Sentezde çelişen ve kritik iddiaları ana ajan tek komutla doğrular. |
+| Eksik sır taraması | Risk açısı "geçmişte sır yok" dedi; vault'taki iş sırası notu tersini söylüyordu, hedefli arama secret'ı buldu. | Olumsuz iddiaları da doğrula; vault'taki bilinen olaylarla karşılaştır. |
+| Eski dalı öğrenmek | Yerel kopya yan dalda ve ana daldan yüzlerce commit gerideydi. | Öğrenmeden önce dalı ve uzakla farkı kontrol et; gerekirse ana dalı geçici klasöre klonla. |
 | Paylaşılan bot | Başkasına açılacak bot, ana asistanın vault/mail/terminal erişimini devralacaktı. | Ayrı profil, ayrı bot, minimum araç. |
 
 ## Manuel kaçış yolu
