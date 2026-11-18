@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/VibeOS-v1.1.1-e8892b?style=for-the-badge&labelColor=0e0d0b" alt="VibeOS v1.0.0">
+  <img src="https://img.shields.io/badge/VibeOS-v1.2.0-e8892b?style=for-the-badge&labelColor=0e0d0b" alt="VibeOS v1.0.0">
   <img src="https://img.shields.io/badge/motor-Avenox%20Beyin%20V3-5f7a5a?style=for-the-badge&labelColor=0e0d0b" alt="Motor: Avenox Beyin V3">
   <img src="https://img.shields.io/badge/lisans-MIT-c2412d?style=for-the-badge&labelColor=0e0d0b" alt="Lisans MIT">
 </p>
@@ -74,8 +74,8 @@ kaynak bağlantılı not ve geri okuma. <b>Zorunlu.</b>
 <td width="50%" valign="top">
 <img src="assets/mod-sync-v2.webp" alt="Senkron" width="100%">
 <h3>⇄ Senkron <sup><code>sync</code></sup></h3>
-Vault'u private bir GitHub reposuyla birden çok makinede eşitler. 5 dakikada bir, çakışmaya
-dayanıklı, makine dosyaları Git dışında.
+Vault'u private bir GitHub reposuyla birden çok makinede eşitler. 5 dakikada bir; çakışmada
+durmaz, hiçbir veriyi silmez, makine dosyaları Git dışında kalır.
 </td>
 </tr>
 <tr>
@@ -155,7 +155,7 @@ sonra tarife işlendi. Bazıları:
 | **Yalancı Mesaj** | Boş crontab'da betik yarıda kesildi ama ekrana "eklendi" yazdı. | Mesaja değil gerçek çıktıya bak (`crontab -l`). |
 | **Kök Hayaleti** | `docker exec` root çalıştı, Hermes kendi dosyalarını okuyamadı. | Container komutları her zaman Hermes kullanıcısıyla. |
 | **Zaman Goblini** | Sunucu UTC'deydi, hatırlatmalar 3 saat kaydı. | Zamanlanmış her işte saat dilimi açık. |
-| **Sıra Balçığı** | Commit pull'dan önce olunca makine dosyaları repoya sızdı. | Önce fetch + pull, sonra commit. |
+| **Kilit Balçığı** | Aynı yeni not iki makinede oluşunca eski senkron 16 saat "pull çakıştı" döngüsünde kaldı. | Sıra commit → merge → push; çakışmada yerel sürüm `.cakisma-<makine>` kopyası olur, senkron durmaz. |
 | **Sessiz Ağ** | DNS hatası, çakışma alarmı gibi göründü. | Önce `fetch`; ağ yoksa sessizce sonraki tur. |
 | **PATH Mimiği** | launchd kabuk profilini okumadı, `git` bulunamadı. | Zamanlayıcıda `PATH` açıkça verilir. |
 | **İkiz Receipt** | İki makine aynı kimlikle kayıt yazdı, Git add/add çakışması. | Kayıt kimliğine oturum ekinin ilk 8 karakteri. |

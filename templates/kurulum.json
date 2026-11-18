@@ -1,5 +1,5 @@
 {
-  "vibeos": "1.1.1",
+  "vibeos": "1.2.0",
   "engine": {"name": "avenox-beyin", "series": "3"},
   "vault": {
     "layout": {"projects": "projects/", "meetings": "notes/gorusmeler/", "handoff": "notes/devir/", "knowledge": "knowledge/"},
